@@ -1,0 +1,16 @@
+export const SPEND = 'Revenue (Adv Currency)';
+export const CAMPAIGN_ID = 'Campaign ID';
+export const CAMPAIGN_NAME = 'Campaign Name';
+export const TOTAL_CONVERSIONS = 'Total Conversions';
+export const CREATIVE_SIZE = 'Creative Size';
+export const INSERTION_ORDER_ID = 'Insertion Order ID';
+export const INSERTION_ORDER_NAME = 'Insertion Order';
+export const CLICK_RATE = 'Click Rate (CTR)';
+export const IMPRESSIONS = 'Impressions';
+export const CLICKS = 'Clicks';
+export const CPA = 'Revenue eCPA (Adv Currency)';
+export const CPM = 'Revenue eCPM (Adv Currency)';
+export const CPC = 'Revenue eCPC (Adv Currency)';
+export const DEVICE_TYPE = 'Device Type';
+export const TIME_OF_DAY = 'Time of Day';
+export const DAY_OF_WEEK = 'Day of Week';

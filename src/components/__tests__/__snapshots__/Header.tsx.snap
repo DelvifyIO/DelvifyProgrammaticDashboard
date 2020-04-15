@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header renders correctly 1`] = `
+<header
+  className="css-dy6o69"
+>
+  <div
+    className="css-1jjsitt"
+  >
+    <a
+      className="css-1w8zl5a"
+      href="/"
+    >
+      Test Title
+    </a>
+  </div>
+</header>
+`;
