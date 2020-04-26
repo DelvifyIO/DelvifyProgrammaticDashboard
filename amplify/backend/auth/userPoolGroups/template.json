@@ -1,0 +1,68 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Parameters": {
+        "authdashboardCognitoUserPoolId": {
+            "Type": "String",
+            "Default": "authdashboardCognitoUserPoolId"
+        },
+        
+        "authdashboardCognitoAppClientID": {
+            "Type": "String",
+            "Default": "authdashboardCognitoAppClientID"
+        },
+        "authdashboardCognitoAppClientIDWeb": {
+            "Type": "String",
+            "Default": "authdashboardCognitoAppClientIDWeb"
+        },
+        "AuthRoleArn": {
+            "Type": "String"
+        },
+        "UnauthRoleArn": {
+            "Type": "String"
+        },
+        "env": {
+            "Type": "String"
+        }
+    },
+    "Conditions": {
+        "ShouldNotCreateEnvResources": {
+            "Fn::Equals": [
+                {
+                    "Ref": "env"
+                },
+                "NONE"
+            ]
+        }
+    },
+    "Resources": {
+    
+        "AdminGroup": {
+          "Type" : "AWS::Cognito::UserPoolGroup",
+          "Properties" : {
+              "GroupName" : "Admin",
+              "Precedence" : 1,
+              
+              "UserPoolId" : {
+                "Ref": "authdashboardCognitoUserPoolId"
+              } 
+            }
+        },
+        
+    
+        "ClientGroup": {
+          "Type" : "AWS::Cognito::UserPoolGroup",
+          "Properties" : {
+              "GroupName" : "Client",
+              "Precedence" : 2,
+              
+              "UserPoolId" : {
+                "Ref": "authdashboardCognitoUserPoolId"
+              } 
+            }
+        },
+        
+    
+    
+    },
+    
+}

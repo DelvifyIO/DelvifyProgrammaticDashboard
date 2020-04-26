@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import {
   Col,
@@ -12,14 +12,15 @@ import {
   InputGroupText,
   Input,
   FormFeedback,
-  Button,
+  Button, CardTitle,
 } from 'reactstrap';
 import useForm from 'react-hook-form';
-import { navigate } from 'gatsby';
 import styled from '@emotion/styled';
+import { Auth } from 'aws-amplify';
+import { navigate } from 'gatsby';
 
 import { GlobalStateContext, GlobalDispatchContext } from '../context';
-import { LoginData, getToken, setToken } from '../utils/auth';
+import {LoginData, getToken, setToken, REGISTER_TYPE} from '../utils/auth';
 import { login } from '../services/api';
 import AuthLayout from '../components/AuthLayout';
 import logoSrc from '../assets/img/brand/delvify_orange_trans.png';
@@ -29,46 +30,49 @@ const LogoImg = styled.img`
   margin: -2rem 0;
 `;
 
-const handleLogin = async ({ email, password }: LoginData): Promise<void> => {
-  const response = await login(email, password);
-  if (!response.ok) {
-    throw new Error(response.statusText);
-  }
-  const authInfo = await response.json();
-  return authInfo;
-};
+const Login: React.FC<RouteComponentProps> = (props) => {
+  const [error, setError] = useState(null);
 
-const Login: React.FC<RouteComponentProps> = () => {
-  const [shouldRender, setShouldRender] = React.useState(false);
-  const state = React.useContext(GlobalStateContext);
   const dispatch = React.useContext(GlobalDispatchContext);
 
-  React.useEffect(() => {
-    if (getToken()) {
-      navigate('/dashboard/home');
-      return;
-    }
-    setShouldRender(true);
-  }, []);
+  // React.useEffect(() => {
+  //   if (getToken()) {
+  //     navigate('/dashboard/home');
+  //     return;
+  //   }
+  //   setShouldRender(true);
+  // }, []);
 
   const { register, handleSubmit, errors } = useForm();
 
   const onSubmit = async (data: LoginData): Promise<void> => {
+    const { email, password } = data;
+    setError(null);
     try {
-      const { userInfo, token } = await handleLogin(data);
-      setToken(token);
-      dispatch({
-        type: 'SET_USER_INFO',
-        value: userInfo,
-      });
-      navigate('/dashboard/home');
+      const user = await Auth.signIn(email, password);
+      console.log(user);
+      if (user.signInUserSession) {
+        setToken(user.signInUserSession.accessToken.jwtToken);
+        dispatch({
+          type: 'SET_USER_INFO',
+          value: user,
+        });
+        // navigate('/dashboard/home', { replace: true });
+      } else if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+        dispatch({
+          type: 'SET_TEMP_USER',
+          value: user,
+        });
+        navigate('/register', { state: { type: REGISTER_TYPE.NEW_PASSWORD } })
+      }
     } catch (error) {
+      setError(error.message);
       console.log('error in onSubmit: ', error);
       console.log('errorMsg in onSubmit: ', error.message);
     }
   };
 
-  return shouldRender ? (
+  return (
     <AuthLayout>
       <Col lg="5" md="7">
         <Card className="bg-secondary shadow border-0">
@@ -76,6 +80,7 @@ const Login: React.FC<RouteComponentProps> = () => {
             <LogoImg src={logoSrc} />
           </CardHeader>
           <CardBody className="px-lg-5 py-lg-5">
+            <CardTitle className="h3 text-center">{ 'Welcome' }</CardTitle>
             <Form role="form" onSubmit={handleSubmit(onSubmit)}>
               <FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
@@ -89,9 +94,9 @@ const Login: React.FC<RouteComponentProps> = () => {
                     placeholder="Email"
                     type="email"
                     name="email"
-                    innerRef={(ref) => register(ref, { required: true, pattern: /^\S+@\S+$/i })}
+                    innerRef={(ref) => register(ref, { required: false, pattern: /^\S+@\S+$/i })}
                   />
-                  <FormFeedback>Please enter a valid email address</FormFeedback>
+                  { errors.email && <FormFeedback>{ errors.email.message }</FormFeedback> }
                 </InputGroup>
               </FormGroup>
               <FormGroup>
@@ -106,11 +111,12 @@ const Login: React.FC<RouteComponentProps> = () => {
                     placeholder="Password"
                     type="password"
                     name="password"
-                    innerRef={(ref) => register(ref, { minLength: 6 })}
+                    innerRef={(ref) => register(ref, { required: false, minLength: 6 })}
                   />
-                  <FormFeedback>Password min length: 6 characters</FormFeedback>
+                  { errors.password && <FormFeedback>{ errors.password.message }</FormFeedback> }
                 </InputGroup>
               </FormGroup>
+              { !!error && <code>{error}</code> }
               <div className="text-center">
                 <Button className="my-4" color="primary" type="submit">
                     Sign in
@@ -133,7 +139,7 @@ const Login: React.FC<RouteComponentProps> = () => {
         </Row> */}
       </Col>
     </AuthLayout>
-  ) : <></>;
+  );
 };
 
 export default Login;

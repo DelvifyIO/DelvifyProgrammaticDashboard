@@ -1,0 +1,25 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-delvifydashboard-dev-183136-authRole",
+            "UnauthRoleArn": "arn:aws:iam::025920020326:role/amplify-delvifydashboard-dev-183136-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::025920020326:role/amplify-delvifydashboard-dev-183136-authRole",
+            "Region": "ap-southeast-1",
+            "DeploymentBucketName": "amplify-delvifydashboard-dev-183136-deployment",
+            "UnauthRoleName": "amplify-delvifydashboard-dev-183136-unauthRole",
+            "StackName": "amplify-delvifydashboard-dev-183136",
+            "StackId": "arn:aws:cloudformation:ap-southeast-1:025920020326:stack/amplify-delvifydashboard-dev-183136/9d31e410-854d-11ea-992a-0a6602c8251e",
+            "AmplifyAppId": "d9f0k7h4winmu"
+        },
+        "categories": {
+            "function": {
+                "dashboardCognitoPostConfirmation": {
+                    "GROUP": "Client"
+                }
+            },
+            "auth": {
+                "dashboardCognito": {}
+            }
+        }
+    }
+}

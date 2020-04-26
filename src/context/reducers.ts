@@ -2,8 +2,8 @@ import { State, Action } from './types';
 
 export const initialState = {
   isLoading: true,
-  email: '',
-  name: '',
+  user: null,
+  tempUser: null,
   selectedCampaignId: '',
   headlineDateRange: 30,
   queryIds: {
@@ -32,9 +32,19 @@ export default function reducers(state: State, action: Action): State {
       return merge({ isLoading: action.value });
     }
 
+    case 'SET_TEMP_USER': {
+      const user = action.value;
+      return merge({ tempUser: user });
+    }
+
+    case 'SET_USER': {
+      const user = action.value;
+      return merge({ user });
+    }
+
     case 'SET_USER_INFO': {
       const { queryIds, email, name } = action.value;
-      return merge({ queryIds, email, name });
+      return merge({ queryIds, email, name, tempUser: null });
     }
 
     case 'REMOVE_USER_INFO': {

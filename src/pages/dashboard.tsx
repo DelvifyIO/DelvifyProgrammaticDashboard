@@ -62,7 +62,8 @@ export const redirectIfPathNotExists = (pathname: string): boolean | void => (
 const routes = getRoutes(directory);
 
 type DashboardProps = {
-  location: { pathname: string };
+  location?: { pathname: string },
+  path?: string,
 }
 
 // entire dashboard subroute is private.

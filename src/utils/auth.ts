@@ -1,8 +1,25 @@
 const LOCAL_STORAGE_KEY = 'delvifyDashboardReportingAppToken';
 
+export const REGISTER_TYPE = {
+  CREATE_USER: 'createUser',
+  NEW_USER: 'newUser',
+  NEW_PASSWORD: 'newPassword'
+};
+
 export interface LoginData {
   email: string;
   password: string;
+}
+
+export interface RegisterData {
+  name: string;
+  email: string;
+  password: string;
+  googleId: string;
+}
+
+export interface ConfirmationData {
+  code: string;
 }
 
 export const isBrowser = () => typeof window !== 'undefined';
