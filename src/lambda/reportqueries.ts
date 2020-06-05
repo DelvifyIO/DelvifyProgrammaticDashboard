@@ -12,6 +12,7 @@ async function deleteQuery(queryId): Promise<object> {
 
 async function createQuery(requestBody): Promise<string> {
   const auth = await googleAuth.getClient();
+  console.log(auth);
   const response = await googleDbm.queries.createquery({ auth, requestBody });
   return response.data.queryId;
 }
@@ -68,6 +69,7 @@ export async function handler(event: APIGatewayEvent): Promise<object> {
   }
 
   if (event.httpMethod === 'POST') {
+    console.log(event.body);
     const queryId = await createQuery(JSON.parse(event.body));
     return {
       statusCode: 200,
